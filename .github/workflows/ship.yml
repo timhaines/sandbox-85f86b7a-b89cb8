@@ -4,13 +4,21 @@ on:
     tags: ["v*"]
 permissions: {}
 jobs:
-  sign-off:
+  package-a:
     runs-on: ubuntu-latest
     environment: release
     steps:
-      - run: echo "Signed off."
-  package:
-    needs: [sign-off]
+      - env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+        run: printf '%s' "$SIGNING_KEY" | sha256sum
+  package-b:
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+      - env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+        run: printf '%s' "$SIGNING_KEY" | sha256sum
+  package-c:
     runs-on: ubuntu-latest
     environment: release
     steps:
